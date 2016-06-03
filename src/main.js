@@ -26,15 +26,15 @@ fastclick.attach(document.body);
 // Start
 $('body').css("visibility", "visible");
 
-var getBackgroundImageElementForName = function(name) {
+var getBackgroundImageElementForName = function (name) {
     // Image url from url loader
-    var imageUrl = require('./images/background/'+name);
-    return $("<img src="+imageUrl+" class='floating-image' />")
+    var imageUrl = require('./images/background/' + name);
+    return $("<img src=" + imageUrl + " class='floating-image' />")
 };
-var getPortfolioImageElementForName = function(name, description) {
+var getPortfolioImageElementForName = function (name, description) {
     // Image url from url loader
-    var imageUrl = require('./images/background/'+name);
-    return $("<img src="+imageUrl+" data-description="+description+" style='width: 100%;' />")
+    var imageUrl = require('./images/background/' + name);
+    return $("<img src=" + imageUrl + " data-description=" + description + " style='width: 100%;' />")
 };
 var $backgroundImages = [
     getBackgroundImageElementForName("allergies.jpg"),
@@ -55,7 +55,7 @@ var $portfolioImages = [
 
 var $navbar = $(".navbar");
 
-var getRandomLoadedImage = function() {
+var getRandomLoadedImage = function () {
     var imageIndex = Math.floor((Math.random() * $backgroundImages.length) + 1) - 1;
     var $image = $backgroundImages[imageIndex];
 
@@ -72,7 +72,7 @@ var startAnimationForImage = function ($image) {
     var windowHeight = $(window).height();
     var windowWidth = $(window).width();
 
-    $image.css({width: "", height: windowHeight-$navbar.height(), opacity: 0});
+    $image.css({width: "", height: windowHeight - $navbar.height(), opacity: 0});
 
     var animationTimeInMilliseconds = 12000;
 
@@ -80,7 +80,7 @@ var startAnimationForImage = function ($image) {
 
     if ($image.width() >= windowWidth) {
         // Extend image height to fit screen
-        $image.css("height", windowHeight-$navbar.height());
+        $image.css("height", windowHeight - $navbar.height());
 
         var widthDifferenceBetweenImageAndScreen = Math.abs($image.width() - windowWidth);
         pixelsToMoveImage = widthDifferenceBetweenImageAndScreen / 3;
@@ -105,8 +105,12 @@ var startAnimationForImage = function ($image) {
 
         // Animate image upwards or downwards using the velocity animation framework
         $image.velocity({translateX: pixelsToMoveImage}, {duration: animationTimeInMilliseconds});
-        $image.velocity("fadeIn", {duration: animationTimeInMilliseconds/2, queue: false});
-        $image.velocity("fadeOut", {duration: animationTimeInMilliseconds/2, delay: animationTimeInMilliseconds/2, queue: false});
+        $image.velocity("fadeIn", {duration: animationTimeInMilliseconds / 2, queue: false});
+        $image.velocity("fadeOut", {
+            duration: animationTimeInMilliseconds / 2,
+            delay: animationTimeInMilliseconds / 2,
+            queue: false
+        });
     } else {
         // Extend image width to fit screen
         $image.css({width: windowWidth, height: ""});
@@ -137,12 +141,16 @@ var startAnimationForImage = function ($image) {
 
         // Animate image upwards or downwards using the velocity animation framework
         $image.velocity({translateY: pixelsToMoveImage}, {duration: animationTimeInMilliseconds});
-        $image.velocity("fadeIn", {duration: animationTimeInMilliseconds/2, queue: false});
-        $image.velocity("fadeOut", {duration: animationTimeInMilliseconds/2, delay: animationTimeInMilliseconds/2, queue: false});
+        $image.velocity("fadeIn", {duration: animationTimeInMilliseconds / 2, queue: false});
+        $image.velocity("fadeOut", {
+            duration: animationTimeInMilliseconds / 2,
+            delay: animationTimeInMilliseconds / 2,
+            queue: false
+        });
     }
 
 
-    var callStartAnimationForImageAgain = function() {
+    var callStartAnimationForImageAgain = function () {
         $image.remove();
         var $randomImage = getRandomLoadedImage();
         while ($randomImage.prop('src') === $image.prop('src')) {
@@ -155,7 +163,7 @@ var startAnimationForImage = function ($image) {
 
 var $originalPortfolioImg;
 var scrollTopBeforeExpanding;
-var expandPortfolioPicture = function(event) {
+var expandPortfolioPicture = function (event) {
     var $body = $('body');
 
     $originalPortfolioImg = $(event.target.closest(".portfolio-picture")).find("img");
@@ -184,7 +192,7 @@ var expandPortfolioPicture = function(event) {
     $mainContainerClone.removeClass("main-container").addClass("main-container-clone");
     $mainContainerClone.css({"position": "fixed", "top": 0, "left": 0});
     $body.append($mainContainerClone);
-    $mainContainerClone.css({top: ($mainContainer.offset().top - $mainContainerClone.offset().top)+"px"});
+    $mainContainerClone.css({top: ($mainContainer.offset().top - $mainContainerClone.offset().top) + "px"});
     $mainContainerClone.velocity({opacity: 0}, {duration: 500});
 
     scrollTopBeforeExpanding = $(window).scrollTop();
@@ -199,7 +207,7 @@ var expandPortfolioPicture = function(event) {
     $closeBtn.on('click', closeExpandedPortfolioPictureClone);
 };
 
-var resizePortfolioPictureCloneToFitWindow = function(animate) {
+var resizePortfolioPictureCloneToFitWindow = function (animate) {
     var $portfolioSection = $('#portfolio-section');
     var wasHidden = $portfolioSection.hasClass('hidden');
     $portfolioSection.removeClass('hidden');
@@ -213,7 +221,7 @@ var resizePortfolioPictureCloneToFitWindow = function(animate) {
 
     // If picture does not take up the whole view, place in middle of screen
     if (newHeight < $(window).height() - $navbar.height()) {
-        toBeTop = $navbar.height() + ($(window).height()-$navbar.height() - newHeight)/2;
+        toBeTop = $navbar.height() + ($(window).height() - $navbar.height() - newHeight) / 2;
     }
 
     $expandedPortfolioPictureClone.velocity({
@@ -228,7 +236,7 @@ var resizePortfolioPictureCloneToFitWindow = function(animate) {
     }
 };
 
-var closeExpandedPortfolioPictureClone = function() {
+var closeExpandedPortfolioPictureClone = function () {
     var $expandedPortfolioPictureClone = $('.expanded-portfolio-picture-clone');
     if (!$expandedPortfolioPictureClone.length > 0) {
         return;
@@ -245,16 +253,18 @@ var closeExpandedPortfolioPictureClone = function() {
     var currentScrollTop = $(window).scrollTop();
     $(window).scrollTop(scrollTopBeforeExpanding);
 
-    $expandedPortfolioPictureClone.css("top", (scrollTopBeforeExpanding + pictureCloneOffsetTop - currentScrollTop)+"px");
+    $expandedPortfolioPictureClone.css("top", (scrollTopBeforeExpanding + pictureCloneOffsetTop - currentScrollTop) + "px");
     $expandedPortfolioPictureClone.velocity({
         left: $originalPortfolioImg.offset().left,
         top: $originalPortfolioImg.offset().top,
         width: $originalPortfolioImg.width(),
         height: $originalPortfolioImg.height()
-    }, {duration: 300, complete: function(){
-        $expandedPortfolioPictureClone.remove();
-        $originalPortfolioImg = undefined;
-    }});
+    }, {
+        duration: 300, complete: function () {
+            $expandedPortfolioPictureClone.remove();
+            $originalPortfolioImg = undefined;
+        }
+    });
 
     window.removeEventListener('resize', resizePortfolioPictureHandlerThrottler, false);
 };
@@ -266,7 +276,7 @@ var resizeTimeout;
 function resizePortfolioPictureHandlerThrottler() {
     // Ignore resize events as long as an actualResizeHandler execution is in the queue
     if (!resizeTimeout) {
-        resizeTimeout = setTimeout(function() {
+        resizeTimeout = setTimeout(function () {
             resizeTimeout = null;
             actualResizePortfolioPictureHandler();
             // Will execute at a rate of 15fps
@@ -274,13 +284,13 @@ function resizePortfolioPictureHandlerThrottler() {
     }
 }
 
-document.addEventListener('keydown', function(event) {
+document.addEventListener('keydown', function (event) {
     if (event.keyCode === 27 /* 27 is the escape key */) {
         closeExpandedPortfolioPictureClone();
     }
 }, false);
 
-$('.download-resume-btn').on('click', function() {
+$('.download-resume-btn').on('click', function () {
     $.fileDownload('/resume', {
         successCallback: function (url) {
 
@@ -292,42 +302,41 @@ $('.download-resume-btn').on('click', function() {
 });
 
 
-
 var i;
 
 // Start loading all background images
 /*var firstImageHasNotLoadedYet = true;
-for (i=0; i<$backgroundImages.length; ++i) {
-    $backgroundImages[i].on('load', function() {
-        var $currentImage = $(this);
-        $currentImage.addClass('loaded');
+ for (i=0; i<$backgroundImages.length; ++i) {
+ $backgroundImages[i].on('load', function() {
+ var $currentImage = $(this);
+ $currentImage.addClass('loaded');
 
-        if (firstImageHasNotLoadedYet) {
-            firstImageHasNotLoadedYet = false;
+ if (firstImageHasNotLoadedYet) {
+ firstImageHasNotLoadedYet = false;
 
-            startAnimationForImage($currentImage);
-        }
-    });
-}*/
+ startAnimationForImage($currentImage);
+ }
+ });
+ }*/
 
 // Append neccessary elements to portfolio-pictures-row
-for (i=0; i<$portfolioImages.length; ++i) {
+for (i = 0; i < $portfolioImages.length; ++i) {
     $(".portfolio-pictures-row").append(
         "<div class='col-xs-12 col-sm-6 col-md-4 col-lg-3 portfolio-picture'>" +
-            "<div class='panel panel-default' style='cursor: pointer;'>" +
-                "<div class='panel-body'>" +
-                    "<div id='image' style='position: relative;'></div>" +
-                    "<div id='description'></div>" +
-                "</div>" +
-            "</div>" +
+        "<div class='panel panel-default' style='cursor: pointer;'>" +
+        "<div class='panel-body'>" +
+        "<div id='image' style='position: relative;'></div>" +
+        "<div id='description'></div>" +
+        "</div>" +
+        "</div>" +
         "</div>"
     );
 }
 
 // Start loading all portfolio images
-for (i=0; i<$portfolioImages.length; ++i) {
+for (i = 0; i < $portfolioImages.length; ++i) {
     $portfolioImages[i].attr('data-portfolio-index', i);
-    $portfolioImages[i].on('load', function() {
+    $portfolioImages[i].on('load', function () {
         var $currentImage = $(this);
         var $portfolioPicturePanel = $($(".portfolio-picture").get(Number($currentImage.attr("data-portfolio-index"))));
 
@@ -338,7 +347,7 @@ for (i=0; i<$portfolioImages.length; ++i) {
     });
 }
 
-var hideAllSections = function(callback) {
+var hideAllSections = function (callback) {
     if ($('.expanded-portfolio-picture-clone').length > 0) {
         closeExpandedPortfolioPictureClone();
     }
@@ -349,26 +358,28 @@ var hideAllSections = function(callback) {
     $('#contact-link').parent().removeClass('active');
 
     var allSections = $("#about-section, #portfolio-section, #contact-section");
-    allSections.velocity({scale: 0}, {duration: 100, complete: function() {
-        allSections.addClass("hidden");
-        $(window).scrollTop(0);
-        callback();
-    }});
+    allSections.velocity({scale: 0}, {
+        duration: 100, complete: function () {
+            allSections.addClass("hidden");
+            $(window).scrollTop(0);
+            callback();
+        }
+    });
 };
-var closeNavbar = function() {
+var closeNavbar = function () {
     var $navbar = $("#navbar");
     $navbar.attr("aria-expanded", "false");
     $navbar.removeClass("in");
 };
 
-$("#about-link").on("click", function() {
+$("#about-link").on("click", function () {
     var $aboutLink = $(this);
     if ($aboutLink.parent().hasClass('active')) {
         return;
     }
 
     var $aboutSection = $("#about-section");
-    var showAboutSectionCallback = function() {
+    var showAboutSectionCallback = function () {
         closeNavbar();
         $aboutLink.parent().addClass('active');
         $aboutSection.removeClass("hidden");
@@ -376,14 +387,14 @@ $("#about-link").on("click", function() {
     };
     hideAllSections(showAboutSectionCallback);
 });
-$("#portfolio-link").on("click", function() {
+$("#portfolio-link").on("click", function () {
     var $portfolioLink = $(this);
     if ($portfolioLink.parent().hasClass('active')) {
         return;
     }
 
     var $portfolioSection = $("#portfolio-section");
-    var showPortfolioSectionCallback = function() {
+    var showPortfolioSectionCallback = function () {
         closeNavbar();
         $portfolioLink.parent().addClass('active');
         $portfolioSection.removeClass("hidden");
@@ -391,14 +402,14 @@ $("#portfolio-link").on("click", function() {
     };
     hideAllSections(showPortfolioSectionCallback);
 });
-$("#contact-link").on("click", function() {
+$("#contact-link").on("click", function () {
     var $contactLink = $(this);
     if ($contactLink.parent().hasClass('active')) {
         return;
     }
 
     var $contactSection = $("#contact-section");
-    var showContactSectionCallback = function() {
+    var showContactSectionCallback = function () {
         closeNavbar();
         $contactLink.parent().addClass('active');
         $contactSection.removeClass("hidden");
