@@ -1,0 +1,139 @@
+#!/usr/bin/env node
+
+var path = require('path');
+var http = require('http');
+var fs = require('fs');
+
+var express = require('express');
+
+
+const config = {
+    production: process.env.NODE_ENV === 'production'
+};
+
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+function normalizePort(val) {
+    const port = parseInt(val, 10);
+
+    if (isNaN(port)) {
+        // named pipe
+        return val;
+    }
+
+    if (port >= 0) {
+        // port number
+        return port;
+    }
+
+    return false;
+}
+
+/**
+ * Get port from environment and store in Express.
+ */
+const port = normalizePort(process.env.PORT || '3000');
+
+
+
+const app = express();
+const publicDir = path.join(__dirname, "../public");
+
+if (!config.production) {
+    const webpack =                 require("webpack");
+    const webpackConfig =           require("../webpack.config");
+    const webpackDevMiddleware =    require("webpack-dev-middleware");
+
+    const webpackCompiler = webpack(webpackConfig);
+    const webpackDevMiddlewareInstance = webpackDevMiddleware(webpackCompiler, {
+        historyApiFallback: true,
+        stats: {
+            colors: true
+        }
+    });
+
+    app.use(webpackDevMiddlewareInstance);
+} else {
+    app.use(express.static(publicDir));
+}
+
+app.get('/resume', function(req, res) {
+    var pdfFile = path.join(__dirname, '../files') + "/Sarah_Thiele_Resume.pdf";
+
+    fs.readFile(pdfFile, function (err,data){
+        res.writeHead(200, {
+            'Content-Type': 'application/pdf',
+            'Content-Disposition': 'attachment; filename=Sarah Thiele\'s Resume.pdf',
+            'Content-Length': data.length,
+            'Set-Cookie': 'fileDownload=true; path=/'
+        });
+        res.end(data, 'binary');
+    });
+});
+app.use('/', function(req, res) {
+    res.sendFile(publicDir + '/index.html');
+});
+
+
+
+app.set('port', port);
+
+
+/**
+ * Create HTTP server.
+ */
+const server = http.createServer(app);
+
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+server.listen(port);
+
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+function onError(error) {
+    if (error.syscall !== 'listen') {
+        throw error;
+    }
+
+    const bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
+    // handle specific listen errors with friendly messages
+    switch (error.code) {
+        case 'EACCES': {
+            if (!config.production) {
+                console.log(bind + ' requires elevated privileges')
+            }
+            process.exit(1);
+            break;
+        }
+        case 'EADDRINUSE': {
+            if (!config.production) {
+                console.log(bind + ' is already in use')
+            }
+            process.exit(1);
+            break;
+        }
+        default: {
+            throw error;
+        }
+    }
+}
+server.on('error', onError);
+
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+function onListening() {
+    const addr = server.address();
+    if (!config.production) {
+        console.log('Express server started on: http://localhost:'+addr.port);
+        require('open')('http://localhost:'+addr.port);
+    }
+}
+server.on('listening', onListening);

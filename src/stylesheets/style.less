@@ -1,0 +1,50 @@
+@import (reference) '../../node_modules/bootstrap/less/variables';
+
+.floating-image {
+  position: fixed;
+  z-index: -100;
+  overflow: hidden;
+}
+
+@screen-xs-min: 480px;
+@screen-sm-min: 768px;
+@screen-md-min: 992px;
+@screen-lg-min: 1200px;
+
+.navbar-brand {
+    @media (max-width: @screen-xs-min) {margin-top: .35em}
+    @media (min-width: @screen-xs-min) and (max-width: @screen-md-min) {margin-top: .35em}
+    @media (min-width: @screen-md-min) and (max-width: @screen-lg-min) {margin-top: .35em}
+    @media (min-width: @screen-lg-min) {margin-top: .35em}
+}
+.navbar-link {
+    @media (min-width: @screen-xs-min) and (max-width: @screen-md-min) {padding-top: 1.55em !important;}
+    @media (min-width: @screen-md-min) and (max-width: @screen-lg-min) {padding-top: 1.52em !important;}
+    @media (min-width: @screen-lg-min) {padding-top: 1.82em !important;}
+}
+.close-expanded-portfolio-picture-btn {
+  z-index: 100;
+
+  @media (max-width: @screen-xs-min) {right: 4%; top: 110%;}
+  @media (min-width: @screen-xs-min) and (max-width: @screen-md-min) {right: 4%; top: 110%;}
+  @media (min-width: @screen-md-min) and (max-width: @screen-lg-min) {right: 4%; top: 120%;}
+  @media (min-width: @screen-lg-min) {right: 4%; top: 150%;}
+}
+
+
+.navbar-toggle {
+    padding-top: 1.3em !important;
+}
+
+@font-face {
+  font-family: Klinic-Bold-Italics;
+  src: url(../fonts/KlinicSlabBoldIt.otf);
+}
+@font-face {
+  font-family: Klinic-Medium;
+  src: url(../fonts/KlinicSlabMedium.otf);
+}
+@font-face {
+  font-family: Klinic-Light;
+  src: url(../fonts/KlinicSlabLight.otf);
+}
