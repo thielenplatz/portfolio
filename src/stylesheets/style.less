@@ -1,15 +1,24 @@
-@import (reference) '../../node_modules/bootstrap/less/variables';
+@import (reference) '../../node_modules/bootstrap/less/bootstrap';
+
+body {
+  #images {
+    .transition(opacity 500ms);
+    opacity: 1;
+  }
+
+  &.portfolio-section-active {
+    #images {
+      opacity: .1;
+    }
+  }
+}
+
 
 .floating-image {
   position: fixed;
   z-index: -100;
   overflow: hidden;
 }
-
-@screen-xs-min: 480px;
-@screen-sm-min: 768px;
-@screen-md-min: 992px;
-@screen-lg-min: 1200px;
 
 .navbar-brand {
     @media (max-width: @screen-xs-min) {margin-top: .35em}
@@ -24,11 +33,38 @@
 }
 .close-expanded-portfolio-picture-btn {
   z-index: 100;
+  .button-variant(white, #000059, #000059) !important;
 
-  @media (max-width: @screen-xs-min) {right: 4%; top: 110%;}
-  @media (min-width: @screen-xs-min) and (max-width: @screen-md-min) {right: 4%; top: 110%;}
-  @media (min-width: @screen-md-min) and (max-width: @screen-lg-min) {right: 4%; top: 120%;}
-  @media (min-width: @screen-lg-min) {right: 4%; top: 150%;}
+  @media (max-width: @screen-xs-min) {right: 4%; top: 10%;}
+  @media (min-width: @screen-xs-min) and (max-width: @screen-md-min) {right: 4%; top: 10%;}
+  @media (min-width: @screen-md-min) and (max-width: @screen-lg-min) {right: 4%; top: 12%;}
+  @media (min-width: @screen-lg-min) {right: 4%; top: 15%;}
+}
+
+.portfolio-picture {
+  margin-bottom: 30px;
+
+  @media (min-width: @screen-xs-min) and (max-width: @screen-md-min) {
+    &:nth-child(2n + 1) {
+      padding-right: 25px;
+    }
+    &:nth-child(2n + 2) {
+      padding-left: 25px;
+    }
+  }
+
+  @media (min-width: @screen-md-min) {
+    &:nth-child(3n + 1) {
+      padding-right: 30px;
+    }
+    &:nth-child(3n + 2) {
+      padding-left: 22.5px;
+      padding-right: 22.5px;
+    }
+    &:nth-child(3n + 3) {
+      padding-left: 30px;
+    }
+  }
 }
 
 

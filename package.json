@@ -3,18 +3,21 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
-    "webpack": "webpack"
+    "start-dev": "node ./bin/www",
+    "bundle": "NODE_ENV=production webpack"
   },
   "dependencies": {
-    "body-parser": "~1.13.2",
-    "express": "~4.13.1"
+    "express": "~4.13.1",
+    "express-handlebars": "^3.0.0",
+    "express-state": "^1.4.0"
   },
   "devDependencies": {
+    "bootstrap": "^3.3.6",
     "bootstrap-material-design": "^0.5.9",
     "css-loader": "^0.23.1",
     "fastclick": "^1.0.6",
     "file-loader": "^0.8.5",
+    "font-awesome": "^4.6.3",
     "imports-loader": "^0.6.5",
     "jquery": "^2.2.3",
     "jquery-file-download": "^1.4.5",

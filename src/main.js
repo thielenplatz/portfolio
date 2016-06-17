@@ -1,3 +1,4 @@
+require('../node_modules/font-awesome/css/font-awesome.css');
 require('../node_modules/bootstrap/dist/css/bootstrap.css');
 require('../node_modules/bootstrap-material-design/dist/css/bootstrap-material-design.css');
 require('../node_modules/bootstrap-material-design/dist/css/ripples.css');
@@ -33,25 +34,14 @@ var getBackgroundImageElementForName = function (name) {
 };
 var getPortfolioImageElementForName = function (name, description) {
     // Image url from url loader
-    var imageUrl = require('./images/background/' + name);
+    var imageUrl = require('./images/portfolio/' + name);
     return $("<img src=" + imageUrl + " data-description=" + description + " style='width: 100%;' />")
 };
-var $backgroundImages = [
-    getBackgroundImageElementForName("allergies.jpg"),
-    getBackgroundImageElementForName("bigdreams.jpg"),
-    getBackgroundImageElementForName("colab.jpg"),
-    getBackgroundImageElementForName("cornell.jpg"),
-    getBackgroundImageElementForName("holidaycard13.jpg"),
-    getBackgroundImageElementForName("spark.jpg")
-];
-var $portfolioImages = [
-    getPortfolioImageElementForName("allergies.jpg", "allergies.jpg"),
-    getPortfolioImageElementForName("bigdreams.jpg", "bigdreams.jpg"),
-    getPortfolioImageElementForName("colab.jpg", "colab.jpg"),
-    getPortfolioImageElementForName("cornell.jpg", "cornell.jpg"),
-    getPortfolioImageElementForName("holidaycard13.jpg", "holidaycard13.jpg"),
-    getPortfolioImageElementForName("spark.jpg", "spark.jpg")
-];
+
+// backgroundImageNames and portfolioImageNames variables exposed from the express server using express-state
+var $backgroundImages = backgroundImageNames.map(function(backgroundImageName){return getBackgroundImageElementForName(backgroundImageName)});
+var $portfolioImages = portfolioImageNames.map(function(portfolioImageName){return getPortfolioImageElementForName(portfolioImageName)});
+
 
 var $navbar = $(".navbar");
 
@@ -74,7 +64,7 @@ var startAnimationForImage = function ($image) {
 
     $image.css({width: "", height: windowHeight - $navbar.height(), opacity: 0});
 
-    var animationTimeInMilliseconds = 12000;
+    var animationTimeInMilliseconds = 15000;
 
     var pixelsToMoveImage;
 
@@ -168,7 +158,7 @@ var expandPortfolioPicture = function (event) {
 
     $originalPortfolioImg = $(event.target.closest(".portfolio-picture")).find("img");
     var $portfolioImgClone = $originalPortfolioImg.clone();
-    var $closeBtn = $("<button type='button' class='close-expanded-portfolio-picture-btn btn btn-default btn-fab' style='position: absolute;'><span class='glyphicon glyphicon-remove'></span></button>");
+    var $closeBtn = $("<button type='button' class='close-expanded-portfolio-picture-btn btn btn-fab' style='position: fixed; color: white; background-color: #000059; z-index: 1000;'><span class='glyphicon glyphicon-remove'></span></button>");
 
     $body.append($portfolioImgClone);
     $body.append($closeBtn);
@@ -183,16 +173,15 @@ var expandPortfolioPicture = function (event) {
         top: topForWhenScrollingGoesAway,
         width: $originalPortfolioImg.width(),
         height: $originalPortfolioImg.height(),
-        'z-index': 10
+        'z-index': 500
     });
 
     // Hide real #portfolio-section and fade a cloned .main-container
     var $mainContainer = $(".main-container");
     var $mainContainerClone = $mainContainer.clone();
     $mainContainerClone.removeClass("main-container").addClass("main-container-clone");
-    $mainContainerClone.css({"position": "fixed", "top": 0, "left": 0});
+    $mainContainerClone.css({"position": "fixed", "top": $mainContainer.offset().top - $(window).scrollTop() + "px", "left": $mainContainer.offset().left + "px"});
     $body.append($mainContainerClone);
-    $mainContainerClone.css({top: ($mainContainer.offset().top - $mainContainerClone.offset().top) + "px"});
     $mainContainerClone.velocity({opacity: 0}, {duration: 500});
 
     scrollTopBeforeExpanding = $(window).scrollTop();
@@ -214,8 +203,19 @@ var resizePortfolioPictureCloneToFitWindow = function (animate) {
 
     var $expandedPortfolioPictureClone = $('.expanded-portfolio-picture-clone');
 
-    var widthRatio = $expandedPortfolioPictureClone.width() / $portfolioSection.width();
+    var modifier = .7;
+    var modifiedPortfolioSectionWidth = $portfolioSection.width() * modifier;
+
+    var widthRatio = $expandedPortfolioPictureClone.width() / modifiedPortfolioSectionWidth;
     var newHeight = $expandedPortfolioPictureClone.height() / widthRatio;
+
+    if (newHeight < $(window).height() && $(window).width() < 500) {
+        modifier = 1;
+        modifiedPortfolioSectionWidth = $portfolioSection.width() * modifier;
+
+        widthRatio = $expandedPortfolioPictureClone.width() / modifiedPortfolioSectionWidth;
+        newHeight = $expandedPortfolioPictureClone.height() / widthRatio;
+    }
 
     var toBeTop = $navbar.height();
 
@@ -225,9 +225,9 @@ var resizePortfolioPictureCloneToFitWindow = function (animate) {
     }
 
     $expandedPortfolioPictureClone.velocity({
-        left: $portfolioSection.offset().left,
+        left: ($(window).width() - modifiedPortfolioSectionWidth) / 2,
         top: toBeTop,
-        width: $portfolioSection.width(),
+        width: modifiedPortfolioSectionWidth,
         height: newHeight
     }, {duration: animate ? 500 : 0});
 
@@ -290,14 +290,16 @@ document.addEventListener('keydown', function (event) {
     }
 }, false);
 
+$('.github-btn').on('click', function() {
+    var win = window.open('https://github.com/thielenplatz/', '_blank');
+    if (win) {
+        win.focus();
+    }
+});
 $('.download-resume-btn').on('click', function () {
     $.fileDownload('/resume', {
-        successCallback: function (url) {
-
-        },
-        failCallback: function (html, url) {
-
-        }
+        successCallback: function (url) { },
+        failCallback: function (html, url) { }
     });
 });
 
@@ -305,36 +307,36 @@ $('.download-resume-btn').on('click', function () {
 var i;
 
 // Start loading all background images
-/*var firstImageHasNotLoadedYet = true;
+var firstImageHasNotLoadedYet = true;
  for (i=0; i<$backgroundImages.length; ++i) {
- $backgroundImages[i].on('load', function() {
- var $currentImage = $(this);
- $currentImage.addClass('loaded');
+    $backgroundImages[i].on('load', function() {
+        var $currentImage = $(this);
+        $currentImage.addClass('loaded');
 
- if (firstImageHasNotLoadedYet) {
- firstImageHasNotLoadedYet = false;
+        if (firstImageHasNotLoadedYet) {
+            firstImageHasNotLoadedYet = false;
 
- startAnimationForImage($currentImage);
+            startAnimationForImage($currentImage);
+        }
+    });
  }
- });
- }*/
 
 // Append neccessary elements to portfolio-pictures-row
-for (i = 0; i < $portfolioImages.length; ++i) {
+for (i=0; i < $portfolioImages.length; ++i) {
     $(".portfolio-pictures-row").append(
-        "<div class='col-xs-12 col-sm-6 col-md-4 col-lg-3 portfolio-picture'>" +
-        "<div class='panel panel-default' style='cursor: pointer;'>" +
-        "<div class='panel-body'>" +
-        "<div id='image' style='position: relative;'></div>" +
-        "<div id='description'></div>" +
-        "</div>" +
-        "</div>" +
+        "<div class='col-xs-12 col-sm-6 col-md-4 portfolio-picture'>" +
+            "<div class='panel panel-default' style='cursor: pointer;'>" +
+                "<div class='panel-body'>" +
+                    "<div id='image' style='position: relative;'></div>" +
+                    "<div id='description'></div>" +
+                "</div>" +
+            "</div>" +
         "</div>"
     );
 }
 
 // Start loading all portfolio images
-for (i = 0; i < $portfolioImages.length; ++i) {
+for (i=0; i < $portfolioImages.length; ++i) {
     $portfolioImages[i].attr('data-portfolio-index', i);
     $portfolioImages[i].on('load', function () {
         var $currentImage = $(this);
@@ -356,6 +358,8 @@ var hideAllSections = function (callback) {
     $('#about-link').parent().removeClass('active');
     $('#portfolio-link').parent().removeClass('active');
     $('#contact-link').parent().removeClass('active');
+    $('body').removeClass('portfolio-section-active');
+
 
     var allSections = $("#about-section, #portfolio-section, #contact-section");
     allSections.velocity({scale: 0}, {
@@ -375,6 +379,7 @@ var closeNavbar = function () {
 $("#about-link").on("click", function () {
     var $aboutLink = $(this);
     if ($aboutLink.parent().hasClass('active')) {
+        hideAllSections(function(){});
         return;
     }
 
@@ -390,6 +395,7 @@ $("#about-link").on("click", function () {
 $("#portfolio-link").on("click", function () {
     var $portfolioLink = $(this);
     if ($portfolioLink.parent().hasClass('active')) {
+        hideAllSections(function(){});
         return;
     }
 
@@ -399,12 +405,14 @@ $("#portfolio-link").on("click", function () {
         $portfolioLink.parent().addClass('active');
         $portfolioSection.removeClass("hidden");
         $portfolioSection.velocity({scale: 1}, {duration: 200});
+        $('body').addClass('portfolio-section-active');
     };
     hideAllSections(showPortfolioSectionCallback);
 });
 $("#contact-link").on("click", function () {
     var $contactLink = $(this);
     if ($contactLink.parent().hasClass('active')) {
+        hideAllSections(function(){});
         return;
     }
 

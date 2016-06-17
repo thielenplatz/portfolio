@@ -9,12 +9,12 @@ var config = {
     production: process.env.NODE_ENV === 'production'
 };
 
-var plugins = [].concat(config.production ? [new webpack.DefinePlugin({'process.env': {'NODE_ENV': JSON.stringify('production')}}), new webpack.optimize.UglifyJsPlugin({compress: {warnings: false}})] : []);
+var plugins = [].concat(config.production ? [new webpack.DefinePlugin({'process.env': {'NODE_ENV': JSON.stringify('production')}}), new webpack.optimize.UglifyJsPlugin({compress: {unused: false, drop_console: true, warnings: false}})] : []);
 
 var webpackConfig = {
 
     debug: config.production ? false : true,
-    devtool: config.production ? 'cheap-module-source-map' : 'source-map',
+    devtool: config.production ? undefined : 'source-map',
 
     entry: srcDir+'/main.js',
     output: {
@@ -26,25 +26,37 @@ var webpackConfig = {
             {
                 loader: 'style!css',
                 test: /\.css$/,
-                include: [nodeModulesDir + '/bootstrap/dist/css/bootstrap.css', nodeModulesDir + '/bootstrap-material-design/dist/css/bootstrap-material-design.css', nodeModulesDir + '/bootstrap-material-design/dist/css/ripples.css']
+                include: [
+                    nodeModulesDir + '/bootstrap/dist/css/bootstrap.css',
+                    nodeModulesDir + '/bootstrap-material-design/dist/css/bootstrap-material-design.css',
+                    nodeModulesDir + '/bootstrap-material-design/dist/css/ripples.css',
+                    nodeModulesDir + '/font-awesome/css/font-awesome.css'
+                ]
             },
             {
                 loader: 'style!css!less',
                 test: /\.less$/,
-                include: srcDir
-            },
-            {
-                loader: 'url?limit=25000',
-                test: /\.(jpg|png)$/,
-                include: srcDir
+                include: srcDir + '/stylesheets'
             },
 
-            // the url-loader uses DataUrls.
-            // the file-loader emits files.
-            {test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=10000&mimetype=application/font-woff'},
-            {test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=10000&mimetype=application/octet-stream'},
-            {test: /\.(eot|otf)(\?v=\d+\.\d+\.\d+)?$/, loader: 'file'},
-            {test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=10000&mimetype=image/svg+xml'}
+            {
+                loader: 'url?limit=100000&name=images/background/[name].[ext]',
+                test: /\.(jpg|png)$/,
+                include: srcDir + '/images/background'
+            },
+            {
+                loader: 'url?limit=100000&name=images/portfolio/[name].[ext]',
+                test: /\.(jpg|png)$/,
+                include: srcDir + '/images/portfolio'
+            },
+
+            // Loaders for bootstrap and font-awesome fonts
+            {test: /\.woff(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=65000&mimetype=application/font-woff&name=fonts/[name].[ext]'},
+            {test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=65000&mimetype=application/font-woff2&name=fonts/[name].[ext]'},
+            {test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=65000&mimetype=application/octet-stream&name=fonts/[name].[ext]'},
+            {test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=65000&mimetype=application/vnd.ms-fontobject&name=fonts/[name].[ext]'},
+            {test: /\.otf(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=65000&mimetype=application/vnd.ms-fontobject&name=fonts/[name].[ext]'},
+            {test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=65000&mimetype=image/svg+xml&name=fonts/[name].[ext]'}
         ]
     },
     plugins: plugins
