@@ -38,8 +38,8 @@ var getPortfolioImageElementForName = function (name, description) {
     return $("<img src=" + imageUrl + " data-description=" + description + " style='width: 100%;' />")
 };
 
-var backgroundImageNames = ['1.jpg', '2.jpg', '3.jpg'];
-var portfolioImageNames = ['1.jpg', '2.jpg', '3.jpg'];
+var backgroundImageNames = ['1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg', '6.jpg', '7.jpg', '8.jpg'];
+var portfolioImageNames = ['1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg', '6.jpg', '7.jpg'];
 
 // backgroundImageNames and portfolioImageNames variables exposed from the express server using express-state
 var $backgroundImages = backgroundImageNames.map(function(backgroundImageName){return getBackgroundImageElementForName(backgroundImageName)});
@@ -331,7 +331,6 @@ for (i=0; i < $portfolioImages.length; ++i) {
             "<div class='panel panel-default' style='cursor: pointer;'>" +
                 "<div class='panel-body'>" +
                     "<div id='image' style='position: relative;'></div>" +
-                    "<div id='description'></div>" +
                 "</div>" +
             "</div>" +
         "</div>"
@@ -346,7 +345,6 @@ for (i=0; i < $portfolioImages.length; ++i) {
         var $portfolioPicturePanel = $($(".portfolio-picture").get(Number($currentImage.attr("data-portfolio-index"))));
 
         $portfolioPicturePanel.find("#image").append($currentImage);
-        $portfolioPicturePanel.find("#description").append($currentImage.attr("data-description"));
 
         $portfolioPicturePanel.on('click', expandPortfolioPicture);
     });

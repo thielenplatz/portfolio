@@ -9,7 +9,7 @@ var config = {
     production: process.env.NODE_ENV === 'production'
 };
 
-var plugins = [].concat(config.production ? [new webpack.DefinePlugin({'process.env': {'NODE_ENV': JSON.stringify('production')}}), new webpack.optimize.UglifyJsPlugin({compress: {unused: false, drop_console: true, warnings: false}})] : []);
+var plugins = [].concat(config.production ? [new webpack.DefinePlugin({'process.env': {'NODE_ENV': JSON.stringify('production')}}), new webpack.optimize.UglifyJsPlugin({compress: {drop_console: true, warnings: false}})] : []);
 
 var webpackConfig = {
 
