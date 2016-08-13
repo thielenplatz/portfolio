@@ -40,23 +40,23 @@ var webpackConfig = {
             },
 
             {
-                loader: 'url?limit=100000&name=images/background/[name].[ext]',
+                loader: 'url?limit=10000000&name=images/background/[name].[ext]',
                 test: /\.(jpg|png)$/,
                 include: imagesDir + '/background'
             },
             {
-                loader: 'url?limit=100000&name=images/portfolio/[name].[ext]',
+                loader: 'url?limit=10000000&name=images/portfolio/[name].[ext]',
                 test: /\.(jpg|png)$/,
                 include: imagesDir + '/portfolio'
             },
 
             // Loaders for bootstrap and font-awesome fonts
-            {test: /\.woff(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=65000&mimetype=application/font-woff&name=fonts/[name].[ext]'},
-            {test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=65000&mimetype=application/font-woff2&name=fonts/[name].[ext]'},
-            {test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=65000&mimetype=application/octet-stream&name=fonts/[name].[ext]'},
-            {test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=65000&mimetype=application/vnd.ms-fontobject&name=fonts/[name].[ext]'},
-            {test: /\.otf(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=65000&mimetype=application/vnd.ms-fontobject&name=fonts/[name].[ext]'},
-            {test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=65000&mimetype=image/svg+xml&name=fonts/[name].[ext]'}
+            {test: /\.woff(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=1000000&mimetype=application/font-woff&name=fonts/[name].[ext]'},
+            {test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=1000000&mimetype=application/font-woff2&name=fonts/[name].[ext]'},
+            {test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=1000000&mimetype=application/octet-stream&name=fonts/[name].[ext]'},
+            {test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=1000000&mimetype=application/vnd.ms-fontobject&name=fonts/[name].[ext]'},
+            {test: /\.otf(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=1000000&mimetype=application/vnd.ms-fontobject&name=fonts/[name].[ext]'},
+            {test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=1000000&mimetype=image/svg+xml&name=fonts/[name].[ext]'}
         ]
     },
     plugins: plugins
