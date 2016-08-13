@@ -1,10 +1,7 @@
 files
 
-public/bundle.js
-public/bundle.js.map
-
-src/fonts
-src/images
+./fonts
+./images
 
 # Created by https://www.gitignore.io/api/osx,intellij,node
 

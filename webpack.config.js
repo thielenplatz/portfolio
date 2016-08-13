@@ -1,8 +1,8 @@
 var path = require('path');
 var webpack = require('webpack');
 
-var srcDir = path.join(__dirname, './src');
-var publicDir = path.join(__dirname, './public');
+var bundleDir = path.join(__dirname, './output');
+var imagesDir = path.join(__dirname, './images');
 var nodeModulesDir = path.join(__dirname, './node_modules');
 
 var config = {
@@ -16,9 +16,9 @@ var webpackConfig = {
     debug: config.production ? false : true,
     devtool: config.production ? undefined : 'source-map',
 
-    entry: srcDir+'/main.js',
+    entry: __dirname + '/main.js',
     output: {
-        path: publicDir,
+        path: bundleDir,
         filename: 'bundle.js'
     },
     module: {
@@ -36,18 +36,18 @@ var webpackConfig = {
             {
                 loader: 'style!css!less',
                 test: /\.less$/,
-                include: srcDir + '/stylesheets'
+                include: __dirname + '/style.less'
             },
 
             {
                 loader: 'url?limit=100000&name=images/background/[name].[ext]',
                 test: /\.(jpg|png)$/,
-                include: srcDir + '/images/background'
+                include: imagesDir + '/background'
             },
             {
                 loader: 'url?limit=100000&name=images/portfolio/[name].[ext]',
                 test: /\.(jpg|png)$/,
-                include: srcDir + '/images/portfolio'
+                include: imagesDir + '/portfolio'
             },
 
             // Loaders for bootstrap and font-awesome fonts
