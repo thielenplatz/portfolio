@@ -300,10 +300,13 @@ $('.github-btn').on('click', function() {
     }
 });
 $('.download-resume-btn').on('click', function () {
-    $.fileDownload('/resume', {
-        successCallback: function (url) { },
-        failCallback: function (html, url) { }
-    });
+    var downloadAnchor = document.createElement('a');
+    downloadAnchor.href = "https://github.com/thielenplatz/portfolio/raw/gh-pages/Sarah_Thiele_Resume.zip";
+    document.body.appendChild(downloadAnchor);
+
+    downloadAnchor.click();
+
+    document.body.removeChild(downloadAnchor);
 });
 
 
